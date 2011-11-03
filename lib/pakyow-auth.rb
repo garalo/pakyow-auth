@@ -2,6 +2,8 @@ libdir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
 require 'pakyow-auth/user'
+require 'pakyow-auth/session'
+require 'pakyow-auth/session_binder'
 
 module Pakyow
   module Auth
@@ -44,16 +46,23 @@ module Pakyow
     def self.new_session
       Pakyow.app.instance_eval {
         presenter.use_view_path("sessions/new")
+        presenter.view.bind(Session.new)
       }
     end
 
     def self.create_session
       Pakyow.app.instance_eval {
-        if u = User.authenticate(request.params[:email], request.params[:password])
+        session = Session.new(request.params[:session])
+        
+        if u = User.authenticate(session)
           request.session[:user] = u.id
           app.redirect_to '/'
         else
-          Auth.new_session.call
+          #TODO: use invoke_route
+          presenter.use_view_path("sessions/new")
+          presenter.view.bind(session)
+          
+          # app.invoke_route!('/sessions/new', :get)
         end
       }
     end

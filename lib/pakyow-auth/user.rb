@@ -1,14 +1,21 @@
 module Pakyow
   module Auth
     class User
+      class << self
+        @@login_field = :email
+        
+        def login_field
+          @@login_field
+        end
+      end
+      
       include DataMapper::Resource
 
       storage_names[:default] = "users"
       
       attr_accessor :password, :password_confirmation
 
-      property :id,                   Serial
-      property :email,                String 
+      property :id,                   Serial      
       property :crypted_password,     String
       property :salt,                 String
       
@@ -21,7 +28,7 @@ module Pakyow
       
       # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
       def self.authenticate(session)
-        u = User.first(:email => session.login) # need to get the salt
+        u = User.first(User.login_field => session.login) # need to get the salt
         if u && u.authenticated?(session.password)
           return u
         else

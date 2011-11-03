@@ -7,36 +7,32 @@ require 'pakyow-auth/session_binder'
 
 module Pakyow
   module Auth
-    module Routes
-      def self.included(base)
-        base.class_eval {
-          routes do
-            get '/login' do 
-              Auth.new_session 
-            end
+    def self.routes
+      Pakyow.app.instance_eval {
+        get '/login' do 
+          Auth.new_session 
+        end
             
-            get '/sessions/new' do  
-              Auth.new_session
-            end
+        get '/sessions/new' do  
+          Auth.new_session
+        end
             
-            post '/sessions' do
-              Auth.create_session
-            end
+        post '/sessions' do
+          Auth.create_session
+        end
             
-            get '/logout' do
-              Auth.delete_session
-            end
+        get '/logout' do
+          Auth.delete_session
+        end
 
-            get '/users' do
-              Auth.new_user
-            end
+        get '/users' do
+          Auth.new_user
+        end
             
-            post '/users' do
-              Auth.create_user
-            end
-          end
-        }
-      end
+        post '/users' do
+          Auth.create_user
+        end
+      }
     end
 
     ###############

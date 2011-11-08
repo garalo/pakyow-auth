@@ -28,7 +28,7 @@ module Pakyow
       
       # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
       def self.authenticate(session)
-        u = User.first(User.login_field => session.login) # need to get the salt
+        u = self.first(self.login_field => session.login) # need to get the salt
         if u && u.authenticated?(session.password)
           return u
         else

@@ -4,8 +4,14 @@ module Pakyow
       class << self
         @@login_field = :email
         
+        @@secondary_field = nil
+        
         def login_field
           @@login_field
+        end
+        
+        def secondary_field
+          @@secondary_field
         end
       end
       
@@ -32,7 +38,11 @@ module Pakyow
         if u && u.authenticated?(session.password)
           return u
         else
-          return false 
+          if self.secondary_field && (u = self.first(self.secondary_field => session.login)) && u.authenticated?(session.password)
+            return u
+          else
+            return false
+          end
         end
       end
 

@@ -28,7 +28,14 @@ module Pakyow
       def password=(p)
         @password = p
         
-        self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{User.login_field}--") 
+        digest_field = self.send(self.class.login_field)
+        if digest_field.nil? || digest_field.to_s.empty?
+          if self.class.secondary_field && !self.send(self.class.secondary_field).nil?
+            digest_field = self.send(self.class.secondary_field)
+          end
+        end
+        
+        self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{digest_field}--") 
         self.crypted_password = encrypt(p)
       end
       

@@ -24,8 +24,8 @@ module Pakyow
         get '/logout' do
           Auth.delete_session
         end
-
-        get '/users' do
+        
+        get '/users/new' do
           Auth.new_user
         end
             
@@ -52,7 +52,7 @@ module Pakyow
         
         if u = User.authenticate(session)
           request.session[:user] = u.id
-          app.redirect_to '/'
+          app.redirect_to! '/'
         else
           #TODO: use invoke_route
           presenter.use_view_path("sessions/new")
@@ -75,24 +75,24 @@ module Pakyow
     ###############
     
     def self.new_user
-      Pakyow.app.instance_eval {
+      Pakyow.app.instance_eval {        
         presenter.use_view_path("users/new")
-        presenter.view.bind(User.new)
+        presenter.view.bind(::User.new)
       }
     end
 
     def self.create_user
       Pakyow.app.instance_eval {
-        user = User.new(request.params[:user])
+        user = ::User.new(request.params[:user])
         # user.encrypt_password
-    
+        
         if user.valid?      
           user.save!
       
-          redirect_to '/'
+          app.redirect_to! '/'
         else
           presenter.use_view_path("users/new")
-          layout.bind(user)
+          presenter.view.bind(user)
         end
       }
     end

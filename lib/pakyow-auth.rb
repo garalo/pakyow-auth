@@ -50,7 +50,7 @@ module Pakyow
       Pakyow.app.instance_eval {
         session = Session.new(request.params[:session])
         
-        if u = User.authenticate(session)
+        if u = ::User.authenticate(session)
           request.session[:user] = u.id
           app.redirect_to! '/'
         else

@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.authors           = ['Bryan Powell']
   s.email             = 'bryan@metabahn.com'
   s.homepage          = 'http://metabahn.com'
+  s.summary           = 'Authentication for Pakyow web framework'
   
   s.files        = Dir['lib/**/*']
   s.require_path = 'lib'

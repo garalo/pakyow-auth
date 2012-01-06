@@ -20,6 +20,7 @@ module Pakyow
       property :salt,                 String
       
       def password=(p)
+        return if p.nil? || p.empty?
         @password = p
         
         self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{User.login_field}--") 

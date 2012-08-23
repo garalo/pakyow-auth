@@ -1,12 +1,14 @@
 libdir = File.dirname(__FILE__)
 $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
 
-require 'pakyow-auth/user'
-require 'pakyow-auth/session'
-require 'pakyow-auth/session_binder'
+require 'pakyow-auth/binders/session_binder'
+require 'pakyow-auth/binders/user_binder'
+require 'pakyow-auth/orm/datamapper/user'
+require 'pakyow-auth/orm/datamapper/session'
 
 module Pakyow
   module Auth
+
     def self.routes
       Pakyow.app.instance_eval {
         get '/login' do 

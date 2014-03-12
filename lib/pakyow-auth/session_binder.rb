@@ -1,10 +1,11 @@
 module Pakyow
   module Auth
     class SessionBinder < Pakyow::Presenter::Binder
-      binding :session
+      binding :session do
 
-      def action
-        { :action => '/sessions', :method => 'post' }
+       def action
+         { :action => '/sessions', :method => 'post' }
+       end
       end
     end
   end
